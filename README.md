@@ -5,7 +5,7 @@ Django版本：
 因为环境部署过程中，会涉及到更改软件更新源，修改数据库配置等操作，建议选择一台干净的机器进行，建议选择VMware创建虚拟机来进行部署。
 一、安装需要的软件包
 操作系统为Ubuntu Server 16.04
-镜像下载地址：`https://mirrors.aliyun.com/ubuntu-releases/xenial/ubuntu-16.04.4-server-amd64.iso`
+镜像下载地址：https://mirrors.aliyun.com/ubuntu-releases/xenial/ubuntu-16.04.4-server-amd64.iso
 一键部署并运行项目
 
 tar -xf project.tar
