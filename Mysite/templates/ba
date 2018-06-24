@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+    /*设置整体*/
+     *{
+        padding: 0;
+        margin: 0;
+        font-family: "微软雅黑";
+    }
+    /*设置header的div区*/
+    .navbar{
+        height: 72px ;
+        text-align: center;
+        background: rgba(38, 44, 51, 0.95);
+    }
+    .navbar ul {
+        display: inline-block;
+    }
+    /*设置logo的div区*/
+    .navbar .logo{
+        color: #fff ;
+        font-size: 30px ;
+        font-weight:500 ;
+        line-height: 72px ;
+        margin-left: 20px ;
+        display:inline-block ;
+        float: left ;/*左浮动*/
+    }
+    /*设置li标签里*/
+    .navbar ul li{
+        float: left;
+        color: #fff ;
+        width: 112px ;
+        height: 72px ;
+
+        line-height:72px ;
+        cursor: pointer ;/*光标显示成小手型*/
+    }
+    /*细节调整*/
+    ul li{
+        list-style: none ;/*li的小圆点去掉*/
+        font-family: "微软雅黑";
+        padding: 0 30px;
+    }
+    .navbar ul li.first{
+        margin-left: 50px ;/*设置“首页”与“原创文字”间距*/
+        background: rgba(25, 55, 77, 0.96);/*“首页”设置默认背景*/
+    }
+
+
+    /*设置a链接标签*/
+    a{
+        color: #fff ;
+        text-decoration: none ;
+        width: 20em;
+    }
+    /*设置导航添加hover事件*/
+    .navbar ul li:hover{
+         background: #0d1d2e;
+    }
+</style>
+</head>
+<body style="height: 100%; width: 100%;margin: 0">
+    <div class="navbar">
+
+        <ul>
+            <li><a href="/3">宏观经济指标</a></li>
+            <li><a href="/8">地区AQI平均值</a></li>
+            <li><a href="/5">空气质量数据</a></li>
+        </ul>
+
+    </div>
+        <div id="container" style="height: 565px;width: 40%;float: right;"></div>
+        <script type="text/javascript" src="../static/js/bmap.min.js"></script>
+        <script type="text/javascript" src="../static/js/china.js"></script>
+        <script type="text/javascript" src="../static/js/dark.js"></script>
+        <script type="text/javascript" src="../static/js/echarts-gl.min.js"></script>
+        <script type="text/javascript" src="../static/js/echarts.min.js"></script>
+        <script type="text/javascript" src="../static/js/ecStat.min.js"></script>
+       <script type="text/javascript">
+var dom = document.getElementById("container");
+var myChart = echarts.init(dom);
+var app = {};
+option = null;
+option = {
+    tooltip: {
+        trigger: 'item',
+        formatter: "{a} <br/>{b}: {c} ({d}%)"
+    },
+    legend: {
+        orient: 'vertical',
+        x: 'right',
+        data:['优','良好','轻度污染','中度污染','重度污染','AQI大于50','SO2大于10','O3大于70','NO大于40','PM2.5大于10']
+    },
+    series: [
+        {
+            name:'空气质量',
+            type:'pie',
+            selectedMode: 'single',
+            radius: [0, '30%'],
+
+            label: {
+                normal: {
+                    position: 'inner',
+                    backgroundColor: '#eee'
+                }
+            },
+            labelLine: {
+                normal: {
+                    show: false
+                }
+            },
+            data:[
+                {value:335,  selected:true},
+                {value:679 },
+                {value:1548}
+            ]
+        },
+        {
+            name:'空气质量',
+            type:'pie',
+            radius: ['40%', '55%'],
+
+            data:[
+                {value:335, name:'优'},
+                {value:310, name:'良'},
+                {value:234, name:'轻度污染'},
+                {value:135, name:'中度污染'},
+                {value:1048, name:'重度污染'},
+                {value:251, name:'AQI大于70'},
+                {value:147, name:'O3大于80'},
+                {value:102, name:'PM2.5大于10'}
+            ]
+        }
+    ]
+};
+if (option && typeof option === "object") {
+    myChart.setOption(option, true);
+}
+</script>
+<div id="container1" style="height: 650px;width: 60%;float: left"></div>
+        <script type="text/javascript" src="../static/js/bmap.min.js"></script>
+        <script type="text/javascript" src="../static/js/china.js"></script>
+        <script type="text/javascript" src="../static/js/dark.js"></script>
+        <script type="text/javascript" src="../static/js/echarts-gl.min.js"></script>
+        <script type="text/javascript" src="../static/js/echarts.min.js"></script>
+        <script type="text/javascript" src="../static/js/ecStat.min.js"></script>
+       <script type="text/javascript">
+var dom1 = document.getElementById("container1");
+var myChart1 = echarts.init(dom1);
+var app = {};
+option = null;
+var dataBJ = {{ BJ1|safe }};
+
+var dataGZ = {{ GZ1|safe }};
+
+var dataSH = {{ SH1|safe }};
+
+var dataTY = {{ TY1|safe }};
+var dataHZ = {{ HZ1|safe }};
+
+var dataLZ = {{ LZ1|safe }};
+
+var dataTJ = {{ TJ1|safe }};
+
+var dataSZ = {{ SZ1|safe }};
+var dataGL = {{ GL1|safe }};
+
+var dataYN = {{ YN1|safe }};
+
+var dataWH = {{ WH1|safe }};
+
+var dataZZ = {{ ZZ1|safe }};
+var dataHF = {{ HF1|safe }};
+
+var dataCD = {{ CD1|safe }};
+
+var dataNC = {{ NC1|safe }};
+
+var dataSJZ = {{ SJZ1|safe }};
+var dataWLMQ = {{ WLMQ1|safe }};
+var dataNJ= {{ NJ1|safe }};
+
+var schema = [
+    {name: 'date', index: 0, text: '日'},
+    {name: 'AQIindex', index: 1, text: 'AQI指数'},
+    {name: 'PM25', index: 2, text: 'PM2.5'},
+    {name: 'PM10', index: 3, text: 'PM10'},
+    {name: 'CO', index: 4, text: '一氧化碳（CO）'},
+    {name: 'NO2', index: 5, text: '二氧化氮（NO2）'},
+    {name: 'SO2', index: 6, text: '二氧化硫（SO2）'}
+];
+
+
+var itemStyle = {
+    normal: {
+        opacity: 0.8,
+        shadowBlur: 10,
+        shadowOffsetX: 0,
+        shadowOffsetY: 0,
+        shadowColor: 'rgba(0, 0, 0, 0.5)'
+    }
+};
+
+option = {
+    backgroundColor: '#18242e',
+    color: [
+        '#dd4444', '#fec42c', '#80F1BE','#94dd8a', '#9e533b', '#f1193e','#94dd8a','#c23531','#14c2a6','#c22654','#0d1d2e','#4330dd','#2225dd','#262c33','#c22654'
+    ],
+    legend: {
+        y: 'top',
+        data: ['北京', '上海', '广州','深圳','石家庄','天津','兰州','杭州','乌鲁木齐','南京','桂林', '南昌', '成都','云南','郑州','合肥','武汉','太原'] ,
+        textStyle: {
+            color: '#fff',
+            fontSize: 16
+        }
+    },
+    grid: {
+        x: '10%',
+        x2: 150,
+        y: '18%',
+        y2: '10%'
+    },
+    tooltip: {
+        padding: 10,
+        backgroundColor: '#222',
+        borderColor: '#777',
+        borderWidth: 1,
+        formatter: function (obj) {
+            var value = obj.value;
+            return '<div style="border-bottom: 1px solid rgba(255,255,255,.3); font-size: 18px;padding-bottom: 7px;margin-bottom: 7px">'
+                + obj.seriesName + ' ' + value[0] + '日：'
+                + value[7]
+                + '</div>'
+                + schema[1].text + '：' + value[1] + '<br>'
+                + schema[2].text + '：' + value[2] + '<br>'
+                + schema[3].text + '：' + value[3] + '<br>'
+                + schema[4].text + '：' + value[4] + '<br>'
+                + schema[5].text + '：' + value[5] + '<br>'
+                + schema[6].text + '：' + value[6] + '<br>';
+        }
+    },
+    xAxis: {
+        type: 'value',
+        name: '日期',
+        nameGap: 16,
+        nameTextStyle: {
+            color: '#fff',
+            fontSize: 14
+        },
+        max: 31,
+        splitLine: {
+            show: false
+        },
+        axisLine: {
+            lineStyle: {
+                color: '#eee'
+            }
+        }
+
+    },
+    yAxis: {
+        type: 'value',
+        name: 'AQI指数',
+        nameLocation: 'end',
+        nameGap: 20,
+        nameTextStyle: {
+            color: '#fff',
+            fontSize: 16
+        },
+        axisLine: {
+            lineStyle: {
+                color: '#eee'
+            }
+        },
+        splitLine: {
+            show: false
+        }
+    },
+    dataZoom: {
+        id: 'dataZoomX',
+        type: 'slider'
+    },
+
+    visualMap: [
+        {
+            left: 'right',
+            top: '10%',
+            dimension: 2,
+            min: 0,
+            max: 250,
+            itemWidth: 30,
+            itemHeight: 120,
+            calculable: true,
+            precision: 0.1,
+            text: ['圆形大小：PM2.5'],
+            textGap: 30,
+            textStyle: {
+                color: '#fff'
+            },
+            inRange: {
+                symbolSize: [10, 70]
+            },
+            outOfRange: {
+                symbolSize: [10, 70],
+                color: ['rgba(255,255,255,.2)']
+            },
+            controller: {
+                inRange: {
+                    color: ['#c23531']
+                },
+                outOfRange: {
+                    color: ['#444']
+                }
+            }
+        },
+        {
+            left: 'right',
+            bottom: '5%',
+            dimension: 6,
+            min: 0,
+            max: 50,
+            itemHeight: 120,
+            calculable: true,
+            precision: 0.1,
+            text: ['明暗：二氧化硫'],
+            textGap: 30,
+            textStyle: {
+                color: '#fff'
+            },
+            inRange: {
+                colorLightness: [1, 0.5]
+            },
+            outOfRange: {
+                color: ['rgba(255,255,255,.2)']
+            },
+            controller: {
+                inRange: {
+                    color: ['#c23531']
+                },
+                outOfRange: {
+                    color: ['#444']
+                }
+            }
+        }
+    ],
+    series: [
+        {
+            name: '北京',
+            type: 'scatter',
+            itemStyle: itemStyle,
+            data: dataBJ
+        },
+        {
+            name: '上海',
+            type: 'scatter',
+            itemStyle: itemStyle,
+            data: dataSH
+        },
+        {
+            name: '广州',
+            type: 'scatter',
+            itemStyle: itemStyle,
+            data: dataGZ
+        },
+        {
+            name: '深圳',
+            type: 'scatter',
+            itemStyle: itemStyle,
+            data: dataSZ
+        },
+        {
+            name: '杭州',
+            type: 'scatter',
+            itemStyle: itemStyle,
+            data: dataHZ
+        },
+        {
+            name: '兰州',
+            type: 'scatter',
+            itemStyle: itemStyle,
+            data: dataLZ
+        },
+        {
+            name: '天津',
+            type: 'scatter',
+            itemStyle: itemStyle,
+            data: dataTJ
+        },
+        {
+            name: '石家庄',
+            type: 'scatter',
+            itemStyle: itemStyle,
+            data: dataSJZ
+        },{
+            name: '桂林',
+            type: 'scatter',
+            itemStyle: itemStyle,
+            data: dataGL
+        },
+        {
+            name: '南昌',
+            type: 'scatter',
+            itemStyle: itemStyle,
+            data: dataNC
+        },
+        {
+            name: '合肥',
+            type: 'scatter',
+            itemStyle: itemStyle,
+            data: dataHF
+        },
+        {
+            name: '郑州',
+            type: 'scatter',
+            itemStyle: itemStyle,
+            data: dataZZ
+        },
+        {
+            name: '太原',
+            type: 'scatter',
+            itemStyle: itemStyle,
+            data: dataTY
+        },
+        {
+            name: '云南',
+            type: 'scatter',
+            itemStyle: itemStyle,
+            data: dataYN
+        },
+        {
+            name: '武汉',
+            type: 'scatter',
+            itemStyle: itemStyle,
+            data: dataWH
+        },
+        {
+            name: '成都',
+            type: 'scatter',
+            itemStyle: itemStyle,
+            data: dataCD
+        },
+        {
+            name: '乌鲁木齐',
+            type: 'scatter',
+            itemStyle: itemStyle,
+            data: dataWLMQ
+        },
+        {
+            name: '南京',
+            type: 'scatter',
+            itemStyle: itemStyle,
+            data: dataNJ
+        }
+    ]
+};
+if (option && typeof option === "object") {
+    myChart1.setOption(option, true);
+}
+
+
+</script>
+</body>
+</html>

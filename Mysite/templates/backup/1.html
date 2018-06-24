@@ -1,0 +1,417 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+    /*设置整体*/
+    *{
+        padding: 0;
+        margin: 0;
+        font-family: "微软雅黑";
+    }
+    /*设置header的div区*/
+    .header{
+        height: 72px ;
+        background: rgba(38, 44, 51, 0.95);
+    }
+    /*设置logo的div区*/
+    .header .logo{
+        color: #fff ;
+        font-size: 30px ;
+        font-weight:500 ;
+        line-height: 72px ;
+        margin-left: 20px ;
+        display:inline-block ;
+        float: left ;/*左浮动*/
+    }
+    /*设置li标签里*/
+    .header ul li{
+        float: left ;
+        color: #fff ;
+        display: inline-block ;
+        width: 112px ;
+        height: 72px ;
+        text-align: center ;
+        line-height:72px ;
+        cursor: pointer ;/*光标显示成小手型*/
+    }
+    /*细节调整*/
+    ul li{
+        list-style: none ;/*li的小圆点去掉*/
+        font-family: "微软雅黑";
+    }
+    .header ul li.first{
+        margin-left: 50px ;/*设置“首页”与“原创文字”间距*/
+        background: rgba(25, 55, 77, 0.96);/*“首页”设置默认背景*/
+    }
+
+
+    /*设置a链接标签*/
+    a{
+        color: #fff ;
+        text-decoration: none ;
+        width: 20em;
+    }
+    /*设置导航添加hover事件*/
+    .header ul li:hover{
+         background: #0d1d2e;
+    }
+    /*设置登录、注册按钮*/
+    .header .login{
+        float: right ;
+        color: #fff ;
+        line-height: 72px ;
+        margin-right: 20px ;
+    }
+</style>
+</head>
+<body style="height: 100%; width: 100%;margin: 0">
+    <div class="header">
+
+        <ul>
+            <li><a href="/9">空气质量</a></li>
+            <li><a href="/3">经济指标</a></li>
+            <li><a href="/8">AQI平均值</a></li>
+            <li><a href="/5">空气质量数据</a></li>
+            <li><a href="/10">身高体重分布</a></li>
+            <li><a href="/1">收入与寿命预期</a></li>
+            <li><a href="/9">Parallel</a></li>
+            <li><a href="/10">About</a></li>
+        </ul>
+        <div class="login">
+        <span><a href="javascript:void(0)">登陆</a></span>
+        <span>|</span>
+        <span><a href="javascript:void(0)">注销</a></span>
+        </div>
+    </div>
+
+        <div id="container" style="height: 90%;width: 100%"></div>
+        <script type="text/javascript" src="../static/js/bmap.min.js"></script>
+        <script type="text/javascript" src="../static/js/china.js"></script>
+        <script type="text/javascript" src="../static/js/dark.js"></script>
+        <script type="text/javascript" src="../static/js/echarts-gl.min.js"></script>
+        <script type="text/javascript" src="../static/js/echarts.min.js"></script>
+        <script type="text/javascript" src="../static/js/ecStat.min.js"></script>
+       <script type="text/javascript">
+var dom = document.getElementById("container");
+var myChart = echarts.init(dom);
+var app = {};
+option = null;
+// 右下角的图严格意义上并不是直方图，我用ecStat插件画直方图时发现
+// 无法将x轴设为计数轴，所以我就只好以条形图来近似直方图。
+
+var lifepectancy={{ age }};
+var GNI={{ income }};
+var redata={{ redata }};
+
+var myRegression = ecStat.regression('exponential', redata);
+myRegression.points.sort(function(a, b) {
+    return a[0] - b[0];
+});
+
+var bin1 = ecStat.histogram(lifepectancy);
+var bin2 = ecStat.histogram(GNI);
+var tmp={{ tmp }};
+var mydata={{ mydata }};
+var new_data = {{ new_data|safe }}
+
+option = {
+    title:{
+        text:"国民人均收入和预期寿命散点图"
+    },
+    tooltip:{
+        show:true,
+        axisPointer:{
+            type:'cross'
+        },
+        formatter:function (params) {
+            if(params.value[1]>55)  {
+                return params.name + '<br/>'
+                +"GNI: "+params.value[1]+ '美元<br/>'
+                +'年龄: '+params.value[0];
+            }
+            else{
+                return params.name+' '+params.value;
+            }
+        }
+    },
+    toolbox:{
+        right:20,
+        feature:{
+            dataZoom: {},
+            saveAsImage: {},
+            restore: {},
+            magicType: {
+                type:['line','bar']
+            },
+            // brush: {},
+        }
+    },
+    grid:[{
+            show: true,
+            left: 23,
+            top: '5%',
+            containLabel: true,
+            width: '100%',
+            height:'25%'
+        },
+        {
+            show:true,
+            left:0,
+            top:"32%",
+            containLabel:true,
+            width:"75.9%",
+            height:"66%"
+        },
+        {
+            show:true,
+            left:"68%",
+            height:"66%",
+            width:"30%",
+            top:"32%",
+            containLabel:true
+        }],
+    xAxis:[{
+        gridIndex:0,
+        type:'value',
+        scale:true,
+        axisLabel:{
+            show:false
+        }
+    },
+    {
+        gridIndex:1,
+        min:40,
+        name:"年龄",
+        nameLocation:'center',
+        // axisPointer:{
+        //     show:true
+        // }
+    },
+    {
+        gridIndex:2,
+        type:'value',
+
+    }],
+    yAxis:[{
+        gridIndex:0,
+        type:'value',
+        name:"频数：个",
+        nameLocation:'center',
+        nameGap:28
+    },
+    {
+        gridIndex:1,
+        max:80000,
+        name:"GNI",
+        nameLocation:'end',
+        nameGap:10,
+        // axisPointer:{
+        //     show:true
+        // }
+    },
+    {
+        gridIndex:2,
+        type:"category",
+        axisLabel:{
+            show:false
+        },
+        splitLine:{
+            show:true,
+            interval:3
+        },
+        axisTick:{
+            interval:3
+        },
+        data:['0~5,000','5,000~10,000','10,000~15,000','15,000~20,000','20,000~25,000','25,000~30,000','30,000~35,000','35,000~40,000','40,000~45,000','45,000~50,000','50,000~55,000','55,000~60,000','60,000~65,000','65,000~70,000','70,000-75,000','75,000~80,000']
+    }],
+    series: [{
+        xAxisIndex:0,
+        yAxisIndex:0,
+        type: 'bar',
+        animationDuration: function (idx) {
+            // 越往后的数据延迟越大
+            return idx * 500;
+        },
+        itemStyle:{
+            normal:{
+                color:"skyblue"
+            }
+        },
+        label: {
+            normal: {
+                show: true,
+                position: 'top',
+                formatter: function(params) {
+                    return params.value[1];
+                }
+            }
+        },
+        data:bin1.data
+    },
+    {
+        xAxisIndex:1,
+        yAxisIndex:1,
+        name:"china",
+        type:"effectScatter",
+        data:[{name:"China",value:[75.963,13345]},
+        {name:'Japan',value:[83.684,37268],
+            itemStyle:{
+                normal:{
+                    color:'purple'
+            }
+            },
+            label:{
+                normal:{
+                    color:'purple'
+                }
+            }
+        },
+        {name:"United States",value:[79.222,53245],
+        itemStyle:{
+                normal:{
+                    color:'green'
+            }
+            },
+            label:{
+                normal:{
+                    color:'green'
+                }
+            }
+        }],
+        showEffectOn: 'render',
+        rippleEffect: {
+                brushType: 'stroke'
+            },
+            hoverAnimation: true,
+            label: {
+                normal: {
+                    formatter: '{b}',
+                    position: 'right',
+                    show: true,
+                    color:'red'
+                }
+            },
+            symbolSize:15,
+            itemStyle: {
+                normal: {
+                    color: 'red',
+                    shadowBlur: 10,
+                    shadowColor: '#333'
+                }
+            },
+            zlevel: 1
+    },
+    {
+        xAxisIndex:1,
+        yAxisIndex:1,
+        name: 'line',
+        type: 'line',
+        showSymbol: false,
+        smooth: true,
+        data: myRegression.points,
+        itemStyle:{
+            normal:{
+                color:"black"
+            }
+        },
+        markPoint: {
+            itemStyle: {
+                normal: {
+                    color: 'transparent'
+                }
+            },
+            label: {
+                normal: {
+                    show: true,
+                    position: 'left',
+                    formatter: myRegression.expression,
+                    textStyle: {
+                        color: 'black',
+                        fontSize: 14
+                    }
+                }
+            },
+            data: [{
+                coord: myRegression.points[myRegression.points.length - 1]
+            }]
+        }
+    },
+    {
+        xAxisIndex:1,
+        yAxisIndex:1,
+        type:'scatter',
+        itemStyle:{
+            normal:{
+                color:"skyblue"
+            }
+        },
+        data: new_data,
+        markLine : {
+            lineStyle: {
+                normal: {
+                    type: 'solid',
+                    color:'green'
+                }
+            },
+            animationDuration:3000,
+            label:{
+                show:false,
+                position:'middle',
+                formatter:'{b}:{c}'
+            },
+            data : [
+                {type : 'average', name: '平均值',valueIndex:0},
+                {type : 'average', name: '平均值',valueIndex:1}
+                // { xAxis: 170 }
+            ]
+        },
+        markPoint:{
+            data : [
+                    {type : 'max', name: '最大值',valueIndex:1},
+                    {type : 'min', name: '最小值',valueIndex:1},
+                    // {type : 'max', name: '最大值',valueIndex:1},
+                    // {type : 'min', name: '最小值',valueIndex:1},
+                ],
+            itemStyle:{
+                normal:{
+                    color:"green"
+                }
+            }
+        }
+    },
+    {
+        xAxisIndex:2,
+        yAxisIndex:2,
+        type:'bar',
+        itemStyle:{
+            normal:{
+                color:"skyblue"
+            }
+        },
+        animationDuration: function (idx) {
+            // 越往后的数据延迟越大
+            return Math.abs(idx-16) * 500;
+        },
+        barCategoryGap:0.0000001,
+        data:mydata,
+        label: {
+            normal: {
+                show: true,
+                position: 'right',
+                formatter: function(params) {
+                    return params.value[1];
+                }
+            }
+        },
+    }],
+    animationEasing: 'elasticOut',
+    animationDelayUpdate: function (idx) {
+        return idx * 5;
+    }
+};
+if (option && typeof option === "object") {
+    myChart.setOption(option, true);
+}
+       </script>
+</body>
+</html>

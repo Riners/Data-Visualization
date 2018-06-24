@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+    /*设置整体*/
+    *{
+        padding: 0;
+        margin: 0;
+        font-family: "微软雅黑";
+    }
+    /*设置header的div区*/
+    .navbar{
+        height: 62px ;
+        text-align: center;
+        background: rgba(38, 44, 51, 0.95);
+    }
+    .navbar ul {
+        display: inline-block;
+    }
+    /*设置logo的div区*/
+    .navbar .logo{
+        color: #fff ;
+        font-size: 30px ;
+        font-weight:500 ;
+        line-height: 72px ;
+        margin-left: 20px ;
+        display:inline-block ;
+        float: left ;/*左浮动*/
+    }
+    /*设置li标签里*/
+    .navbar ul li{
+        float: left;
+        color: #fff ;
+        width: 112px ;
+        height: 62px ;
+
+        line-height:72px ;
+        cursor: pointer ;/*光标显示成小手型*/
+    }
+    /*细节调整*/
+    ul li{
+        list-style: none ;/*li的小圆点去掉*/
+        font-family: "微软雅黑";
+        padding: 0 30px;
+    }
+    .navbar ul li.first{
+        margin-left: 50px ;/*设置“首页”与“原创文字”间距*/
+        background: rgba(25, 55, 77, 0.96);/*“首页”设置默认背景*/
+    }
+
+
+    /*设置a链接标签*/
+    a{
+        color: #fff ;
+        text-decoration: none ;
+        width: 20em;
+    }
+    /*设置导航添加hover事件*/
+    .navbar ul li:hover{
+         background: #0d1d2e;
+    }
+</style>
+</head>
+<body style="height: 100%; width: 100%;margin: 0">
+    <div class="navbar">
+
+        <ul>
+            <li><a href="/air_quality">空气质量数据</a></li>
+            <li><a href="/region_AQI">地区AQI平均值</a></li>
+            <li><a href="/economic">宏观经济指标</a></li>
+            <li><a href="/area_data">AQI及PM2.5</a></li>
+        </ul>
+
+    </div>
+
+         <div id="container" style="height: 590px;background-color: #0d1d2e"></div>
+      <script type="text/javascript" src="../static/js/bmap.min.js"></script>
+        <script type="text/javascript" src="../static/js/china.js"></script>
+        <script type="text/javascript" src="../static/js/dark.js"></script>
+        <script type="text/javascript" src="../static/js/echarts-gl.min.js"></script>
+        <script type="text/javascript" src="../static/js/echarts.min.js"></script>
+        <script type="text/javascript" src="../static/js/ecStat.min.js"></script>
+       <script type="text/javascript">
+var dom = document.getElementById("container");
+var myChart = echarts.init(dom);
+var app = {};
+option = null;
+var xData = function() {
+    var data = [];
+    for (var i = 1; i < 32; i++) {
+        data.push(i + "日");
+    }
+    return data;
+}();
+
+option = {
+    backgroundColor: "#344b58",
+    "title": {
+        "text": "2017年12月全国分区AQI平均值",
+        "subtext": "BY Riners",
+        x: "4%",
+
+        textStyle: {
+            color: '#fff',
+            fontSize: '22'
+        },
+        subtextStyle: {
+            color: '#90979c',
+            fontSize: '16',
+
+        },
+    },
+    "tooltip": {
+        "trigger": "axis",
+        "axisPointer": {
+            "type": "shadow",
+            textStyle: {
+                color: "#fff"
+            }
+
+        },
+    },
+    toolbox: {
+        show: true,
+        feature: {
+            dataZoom: {
+                yAxisIndex: 'none'
+            },
+            dataView: {readOnly: false},
+            magicType: {type: ['line', 'bar']},
+            restore: {},
+            saveAsImage: {}
+        }
+    },
+    "grid": {
+        "borderWidth": 0,
+        "top": 80,
+        "bottom": 95,
+        textStyle: {
+            color: "#fff"
+        }
+    },
+    "legend": {
+        x: '4%',
+        top: '11%',
+        center: 100,
+        textStyle: {
+            color: '#90979c',
+        },
+        "data": {{ city1|safe }}
+    },
+
+
+    "calculable": true,
+    "xAxis": [{
+        "type": "category",
+        "axisLine": {
+            lineStyle: {
+                color: '#90979c'
+            }
+        },
+        "splitLine": {
+            "show": false
+        },
+        "axisTick": {
+            "show": false
+        },
+        "splitArea": {
+            "show": false
+        },
+        "axisLabel": {
+            "interval": 0,
+
+        },
+        "data": xData,
+    }],
+    "yAxis": [{
+        "type": "value",
+        "splitLine": {
+            "show": false
+        },
+        "axisLine": {
+            lineStyle: {
+                color: '#90979c'
+            }
+        },
+        "axisTick": {
+            "show": false
+        },
+        "axisLabel": {
+            "interval": 0,
+
+        },
+        "splitArea": {
+            "show": false
+        },
+
+    }],
+    "dataZoom": [{
+        "show": true,
+        "height": 30,
+        "xAxisIndex": [
+            0
+        ],
+        bottom: 30,
+        "start": 10,
+        "end": 80,
+        handleIcon: 'path://M306.1,413c0,2.2-1.8,4-4,4h-59.8c-2.2,0-4-1.8-4-4V200.8c0-2.2,1.8-4,4-4h59.8c2.2,0,4,1.8,4,4V413z',
+        handleSize: '110%',
+        handleStyle:{
+            color:"#d3dee5",
+
+        },
+           textStyle:{
+            color:"#fff"},
+           borderColor:"#90979c"
+
+
+    }, {
+        "type": "inside",
+        "show": true,
+        "height": 15,
+        "start": 1,
+        "end": 35
+    }],
+    "series": [{
+            "name": "华北",
+            "type": "bar",
+            "stack": "",
+            "itemStyle": {
+                "normal": {
+                    "color": "rgba(255,144,128,1)",
+                    "label": {
+                        "show": true,
+                        "textStyle": {
+                            "color": "#fff"
+                        },
+                        "position": "insideTop",
+                        formatter: function(p) {
+                            return p.value > 0 ? (p.value) : '';
+                        }
+                    }
+                }
+            },
+            "data": {{ HB }},
+        },
+
+        {
+            "name": "华中",
+            "type": "bar",
+            "stack": "",
+            "itemStyle": {
+                "normal": {
+                    "color": "rgba(0,191,183,1)",
+                    "barBorderRadius": 0,
+                    "label": {
+                        "show": true,
+                        "position": "top",
+                        formatter: function(p) {
+                            return p.value > 0 ? (p.value) : '';
+                        }
+                    }
+                }
+            },
+            "data": {{ HZ }}
+        },
+        {
+            "name": "华东",
+            "type": "bar",
+            "stack": "",
+            "itemStyle": {
+                "normal": {
+                    "color": "rgba(0,129,194,214)",
+                    "barBorderRadius": 0,
+                    "label": {
+                        "show": true,
+                        "position": "top",
+                        formatter: function(p) {
+                            return p.value > 0 ? (p.value) : '';
+                        }
+                    }
+                }
+            },
+            "data": {{ HD }}
+        },
+        {
+            "name": "华南",
+            "type": "bar",
+            "stack": "",
+            "itemStyle": {
+                "normal": {
+                    "color": "rgba(0,129,146,214)",
+                    "barBorderRadius": 0,
+                    "label": {
+                        "show": true,
+                        "position": "top",
+                        formatter: function(p) {
+                            return p.value > 0 ? (p.value) : '';
+                        }
+                    }
+                }
+            },
+            "data": {{ HN }}
+        },
+        {
+            "name": "东北",
+            "type": "bar",
+            "stack": "",
+            "itemStyle": {
+                "normal": {
+                    "color": "rgba(0,217,179,230)",
+                    "barBorderRadius": 0,
+                    "label": {
+                        "show": true,
+                        "position": "top",
+                        formatter: function(p) {
+                            return p.value > 0 ? (p.value) : '';
+                        }
+                    }
+                }
+            },
+            "data": {{ DB }}
+        },
+        {
+            "name": "西南",
+            "type": "bar",
+            "stack": "",
+            "itemStyle": {
+                "normal": {
+                    "color": "rgba(0,220,247,191)",
+                    "barBorderRadius": 0,
+                    "label": {
+                        "show": true,
+                        "position": "top",
+                        formatter: function(p) {
+                            return p.value > 0 ? (p.value) : '';
+                        }
+                    }
+                }
+            },
+            "data": {{ XN }}
+        },
+        {
+            "name": "西北",
+            "type": "bar",
+            "stack": "",
+            "itemStyle": {
+                "normal": {
+                    "color": "rgba(0,131,252,216)",
+                    "barBorderRadius": 0,
+                    "label": {
+                        "show": true,
+                        "position": "top",
+                        formatter: function(p) {
+                            return p.value > 0 ? (p.value) : '';
+                        }
+                    }
+                }
+            },
+            "data": {{ XB }}
+        },
+    ]
+};
+if (option && typeof option === "object") {
+    myChart.setOption(option, true);
+}
+</script>
+</body>
+</html>
