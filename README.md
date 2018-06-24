@@ -15,4 +15,4 @@ bash run.sh
 脚本运行结束之后，通过http://ip:8080/air_quality来访问web服务。
 
 FAQ
-如果遇到脚本运行报错，多半是依赖包安装问题，根据提示安装相关的依赖包即可,比如Django、pymysql、mariadb等。
+run.sh脚本是用于一键部署该web服务的工具，如果遇到脚本运行报错，多半是依赖包安装问题，根据提示安装相关的依赖包即可,比如Django、pymysql、mariadb等。
